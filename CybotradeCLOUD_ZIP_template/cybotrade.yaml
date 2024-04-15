@@ -1,0 +1,4 @@
+runtime: python
+spec:
+  entrypoint: z_score_sma.py
+  requirements: requirements.txt
