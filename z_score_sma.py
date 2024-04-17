@@ -18,8 +18,12 @@ import colorlog
 import math
 
 
+RUNTIME_MODE = RuntimeMode.Live
+
 class Strategy(BaseStrategy):
     symbol = [Symbol(base="BTC", quote="USDT")]
+    quantity = 0.001
+    hedge_mode = True
     sma_length = 50
     z_score_threshold = 0.75
 
@@ -54,7 +58,7 @@ class Strategy(BaseStrategy):
     def __init__(self):
         handler = colorlog.StreamHandler()
         handler.setFormatter(colorlog.ColoredFormatter(f"%(log_color)s{Strategy.LOG_FORMAT}"))
-        file_handler = TimedRotatingFileHandler(filename="z_score_sma.log", when="h",)
+        file_handler = TimedRotatingFileHandler(filename="z_score_sma.log", when="h", backupCount=10)
         file_handler.setLevel(logging.INFO)
         file_handler.setFormatter(logging.Formatter(Strategy.LOG_FORMAT))
         super().__init__(log_level=logging.INFO, handlers=[handler, file_handler])
@@ -80,13 +84,13 @@ class Strategy(BaseStrategy):
         if z_score > self.z_score_threshold:
             if current_pos.long.quantity == 0.0:
                 try:
-                    await strategy.open(exchange=Exchange.BybitLinear,side=OrderSide.Buy, quantity=0.01, symbol=symbol, limit=None, take_profit=None, stop_loss=None, is_hedge_mode=False)
+                    await strategy.open(exchange=Exchange.BybitLinear,side=OrderSide.Buy, quantity=self.quantity, symbol=symbol, limit=None, take_profit=None, stop_loss=None, is_hedge_mode=self.hedge_mode, is_post_only=False)
                 except Exception as e:
                     logging.error(f"Failed to open long: {e}")
         else:
             if current_pos.long.quantity != 0.0:
                 try:
-                    await strategy.close(exchange=Exchange.BybitLinear, side=OrderSide.Buy, quantity=current_pos.long.quantity, symbol=symbol, is_hedge_mode=False)
+                    await strategy.close(exchange=Exchange.BybitLinear, side=OrderSide.Buy, quantity=self.quantity, symbol=symbol, is_hedge_mode=self.hedge_mode)
                 except Exception as e:
                     logging.error(f"Failed to close entire position: {e}")
         
@@ -95,12 +99,12 @@ class Strategy(BaseStrategy):
 
 
 config = RuntimeConfig(
-    mode=RuntimeMode.Backtest,
+    mode=RUNTIME_MODE,
     datasource_topics=[],
     candle_topics=["candles-1d-BTC/USDT-bybit"],
     active_order_interval=1,
     initial_capital=10000.0,
-    # exchange_keys="./exchange-keys.json",
+    exchange_keys="./credentials.json",
     start_time=datetime(2022, 6, 11, 0, 0, 0, tzinfo=timezone.utc),
     end_time=datetime(2024, 1, 5, 0, 0, 0, tzinfo=timezone.utc),
     data_count=150,
