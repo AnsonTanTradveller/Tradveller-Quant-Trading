@@ -45,11 +45,11 @@ class Strategy(BaseStrategy):
         self.datasource_data.append(super().data_map[topic][-1])
 
     async def on_backtest_complete(self, strategy: StrategyTrader):
-        df = pd.DataFrame(self.datasource_data)
-        df.to_csv("coinglass_openinterest_ohlc_binance_BTC_4h.csv")
+        # df = pd.DataFrame(self.datasource_data)
+        # df.to_csv("coinglass_openinterest_ohlc_binance_BTC_4h.csv")
 
         df = pd.DataFrame(self.candle_data)
-        df.to_csv("binance_OHLC_btc_1h.csv")
+        df.to_csv("bybit_candle_btc_1d.csv")
 
         time_taken = datetime.utcnow() - self.start_time
         print("Total time taken: ", time_taken)
@@ -57,11 +57,11 @@ class Strategy(BaseStrategy):
 config = RuntimeConfig(
             mode=RuntimeMode.Backtest,
             datasource_topics=["coinglass|5m|futures/openInterest/ohlc-history?exchange=Binance&symbol=BTCUSDT&interval=4h"],
-            candle_topics=["candles-1h-BTC/USDT-bybit"],
+            candle_topics=["candles-1d-BTC/USDT-bybit"],
             active_order_interval=1,
             initial_capital=10_000.0,
             exchange_keys="./asdfasd.json",
-            start_time=datetime(2023, 1, 1, 0, 0, 0, tzinfo=timezone.utc),
+            start_time=datetime(2024, 1, 1, 0, 0, 0, tzinfo=timezone.utc),
             end_time=datetime(2024, 4, 1, 5, 0, 0, tzinfo=timezone.utc),
             data_count=100,
             api_key="",
