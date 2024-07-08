@@ -61,7 +61,7 @@ config = RuntimeConfig(
             active_order_interval=1,
             initial_capital=10_000.0,
             exchange_keys="./asdfasd.json",
-            start_time=datetime(2020, 1, 1, 0, 0, 0, tzinfo=timezone.utc),
+            start_time=datetime(2021, 1, 1, 0, 0, 0, tzinfo=timezone.utc),
             end_time=datetime(2024, 4, 1, 5, 0, 0, tzinfo=timezone.utc),
             data_count=100,
             api_key="test",
