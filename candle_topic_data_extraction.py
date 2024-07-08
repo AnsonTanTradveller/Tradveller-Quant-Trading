@@ -56,21 +56,21 @@ class Strategy(BaseStrategy):
 
 config = RuntimeConfig(
             mode=RuntimeMode.Backtest,
-            datasource_topics=["coinglass|5m|futures/openInterest/ohlc-history?exchange=Binance&symbol=BTCUSDT&interval=4h"],
+            datasource_topics=[""],
             candle_topics=["candles-1d-BTC/USDT-bybit"],
             active_order_interval=1,
             initial_capital=10_000.0,
             exchange_keys="./asdfasd.json",
-            start_time=datetime(2024, 1, 1, 0, 0, 0, tzinfo=timezone.utc),
+            start_time=datetime(2020, 1, 1, 0, 0, 0, tzinfo=timezone.utc),
             end_time=datetime(2024, 4, 1, 5, 0, 0, tzinfo=timezone.utc),
             data_count=100,
-            api_key="",
+            api_key="test",
             api_secret="notest",
         )
 
 permutation = Permutation(config)
 hyper_parameters = {}
-hyper_parameters["sma"] = np.arange(10,20,30)
+
 async def start():
   await permutation.run(hyper_parameters, Strategy)
  
