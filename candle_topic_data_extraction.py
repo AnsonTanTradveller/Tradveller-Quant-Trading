@@ -56,7 +56,7 @@ class Strategy(BaseStrategy):
 
 config = RuntimeConfig(
             mode=RuntimeMode.Backtest,
-            datasource_topics=[""],
+            datasource_topics=[],
             candle_topics=["candles-1d-BTC/USDT-bybit"],
             active_order_interval=1,
             initial_capital=10_000.0,
