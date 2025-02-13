@@ -1,4 +1,4 @@
-runtime: python
+runtime: //@version=5
 spec:
   entrypoint: z_score_sma.py
   requirements: requirements.txt
