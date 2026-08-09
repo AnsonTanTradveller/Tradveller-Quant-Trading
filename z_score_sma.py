@@ -75,7 +75,7 @@ class Strategy(BaseStrategy):
         sma_forty = talib.SMA(close, self.sma_length)
         # logging.info(f"close: {close[-1]}, sma_forty: {sma_forty} ")
         # price_changes = (float(close[-1]) / sma_forty[-1]) - 1.0
-        std = self.get_stddev(close[-50:])
+        std = self.get_stddev(close[-self.sma_length:])
         z_score = (close[-1] - sma_forty[-1]) / std
 
         current_pos = await strategy.position(exchange=Exchange.BybitLinear,symbol=symbol)
